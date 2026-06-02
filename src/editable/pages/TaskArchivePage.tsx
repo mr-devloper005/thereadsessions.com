@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { CSSProperties } from 'react'
-import { ArrowRight, Bookmark, BriefcaseBusiness, Building2, Camera, Download, FileText, Filter, Image as ImageIcon, MapPin, Megaphone, Search, UserRound } from 'lucide-react'
+import { ArrowRight, BookOpen, Bookmark, BriefcaseBusiness, Building2, Camera, Clock3, Download, FileText, Filter, Image as ImageIcon, MapPin, Megaphone, Search, UserRound } from 'lucide-react'
 import { buildTaskMetadata } from '@/lib/seo'
 import { CATEGORY_OPTIONS, normalizeCategory } from '@/lib/categories'
 import { fetchPaginatedTaskPosts, buildPostUrl } from '@/lib/task-data'
@@ -55,7 +55,7 @@ function pageHref(basePath: string, category: string, page: number) {
 }
 
 const taskDeck: Record<TaskKey, { icon: typeof FileText; archiveClass: string; promise: string; badge: string }> = {
-  article: { icon: FileText, archiveClass: 'grid gap-5 md:grid-cols-2 xl:grid-cols-3', promise: 'Readable editorial cards with room for headlines and excerpts.', badge: 'Read' },
+  article: { icon: FileText, archiveClass: 'grid gap-5 md:grid-cols-2 lg:grid-cols-3', promise: 'Readable editorial cards with room for headlines, images, topics, and useful excerpts.', badge: 'Read' },
   listing: { icon: Building2, archiveClass: 'grid gap-5 xl:grid-cols-2', promise: 'Directory cards highlight company identity, location, contacts, and service details.', badge: 'Business' },
   classified: { icon: Megaphone, archiveClass: 'grid gap-5 xl:grid-cols-2', promise: 'Offer-board cards prioritize price, location, condition, and quick action.', badge: 'Offer' },
   image: { icon: Camera, archiveClass: 'columns-1 gap-5 space-y-5 md:columns-2 xl:columns-3', promise: 'Gallery-first browsing with strong visuals and compact captions.', badge: 'Gallery' },
@@ -92,39 +92,46 @@ export function TaskArchiveView({ task, posts, pagination, category, basePath }:
   const archiveVars = { '--archive-bg': preset.colors.background, '--archive-text': preset.colors.foreground, '--archive-surface': preset.colors.surface, '--archive-accent': preset.colors.accent } as CSSProperties
   const categoryLabel = category === 'all' ? 'All categories' : CATEGORY_OPTIONS.find((item) => item.slug === category)?.name || category
 
+  if (task === 'article') {
+    return <ArticleArchiveView posts={posts} pagination={pagination} category={category} basePath={basePath} archiveVars={archiveVars} categoryLabel={categoryLabel} />
+  }
+  if (task === 'profile') {
+    return <ProfileArchiveView posts={posts} pagination={pagination} category={category} basePath={basePath} archiveVars={archiveVars} categoryLabel={categoryLabel} />
+  }
+
   return (
     <EditableSiteShell>
       <main style={archiveVars} className="bg-[var(--archive-bg)] text-[var(--archive-text)]">
-        <section className="mx-auto grid max-w-[var(--editable-container)] gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:py-20">
-          <div className="rounded-[2.5rem] border border-[var(--editable-border)] bg-[var(--archive-surface)] p-7 shadow-[0_24px_80px_rgba(15,23,42,0.08)] sm:p-10">
+        <section className="mx-auto grid max-w-[1180px] gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_320px] lg:px-8 lg:py-16">
+          <div className="rounded-xl border border-[var(--editable-border)] bg-[var(--archive-surface)] p-7 shadow-[0_18px_54px_rgba(15,23,42,0.08)] sm:p-10">
             <div className="inline-flex items-center gap-2 rounded-full border border-[var(--editable-border)] bg-white/70 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-[var(--archive-accent)]"><Icon className="h-4 w-4" /> {label}</div>
-            <h1 className="mt-5 max-w-4xl text-5xl font-black leading-[0.95] tracking-[-0.07em] sm:text-6xl">{voice?.headline || `Browse ${label}`}</h1>
+            <h1 className="mt-5 max-w-4xl text-4xl font-black leading-tight tracking-tight sm:text-5xl">{voice?.headline || `Browse ${label}`}</h1>
             <p className="mt-6 max-w-2xl text-base leading-8 opacity-70">{voice?.description || SITE_CONFIG.description}</p>
-            <div className="mt-6 rounded-[1.5rem] border border-[var(--editable-border)] bg-white/55 p-4 text-sm font-bold leading-7 opacity-75">{deck.promise}</div>
+            <div className="mt-6 rounded-xl border border-[var(--editable-border)] bg-white/55 p-4 text-sm font-bold leading-7 opacity-75">{deck.promise}</div>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href={basePath} className="rounded-full bg-[var(--archive-text)] px-5 py-3 text-sm font-black text-[var(--archive-bg)]">Browse all</Link>
-              <Link href="/search" className="rounded-full border border-[var(--editable-border)] px-5 py-3 text-sm font-black">Search posts</Link>
+              <Link href="/search" className="rounded-full border border-[var(--editable-border)] px-5 py-3 text-sm font-black">Search articles</Link>
             </div>
           </div>
 
-          <form action={basePath} className="self-end rounded-[2rem] border border-[var(--editable-border)] bg-white/70 p-5 shadow-sm backdrop-blur">
+          <form action={basePath} className="self-end rounded-xl border border-[var(--editable-border)] bg-white/70 p-5 shadow-sm backdrop-blur">
             <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] opacity-55"><Filter className="h-4 w-4" /> Filter</div>
-            <select name="category" defaultValue={category} className="mt-4 h-12 w-full rounded-2xl border border-[var(--editable-border)] bg-white px-4 text-sm font-bold outline-none">
+            <select name="category" defaultValue={category} className="mt-4 h-12 w-full rounded-xl border border-[var(--editable-border)] bg-white px-4 text-sm font-bold outline-none">
               <option value="all">All categories</option>
               {CATEGORY_OPTIONS.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}
             </select>
-            <button className="mt-3 h-12 w-full rounded-2xl bg-[var(--archive-text)] text-sm font-black text-[var(--archive-bg)]">Apply</button>
+            <button className="mt-3 h-12 w-full rounded-xl bg-[var(--archive-text)] text-sm font-black text-[var(--archive-bg)]">Apply</button>
             <p className="mt-3 text-xs font-bold opacity-55">Showing: {categoryLabel}</p>
           </form>
         </section>
 
-        <section className="mx-auto max-w-[var(--editable-container)] px-4 pb-16 sm:px-6 lg:px-8">
+        <section className="mx-auto max-w-[1180px] px-4 pb-16 sm:px-6 lg:px-8">
           {posts.length ? (
             <div className={deck.archiveClass}>
               {posts.map((post, index) => <ArchivePostCard key={post.id || post.slug} post={post} task={task} basePath={basePath} index={index} />)}
             </div>
           ) : (
-            <div className="rounded-[2rem] border border-dashed border-[var(--editable-border)] bg-white/60 p-10 text-center">
+            <div className="rounded-xl border border-dashed border-[var(--editable-border)] bg-white/60 p-10 text-center">
               <Search className="mx-auto h-8 w-8 opacity-45" />
               <h2 className="mt-4 text-3xl font-black tracking-[-0.05em]">No posts found</h2>
               <p className="mt-2 text-sm opacity-65">Try another category or refresh this page after publishing new content.</p>
@@ -139,6 +146,241 @@ export function TaskArchiveView({ task, posts, pagination, category, basePath }:
         </section>
       </main>
     </EditableSiteShell>
+  )
+}
+
+function ArticleArchiveView({
+  posts,
+  pagination,
+  category,
+  basePath,
+  archiveVars,
+  categoryLabel,
+}: {
+  posts: SitePost[]
+  pagination: SiteFeedPagination
+  category: string
+  basePath: string
+  archiveVars: CSSProperties
+  categoryLabel: string
+}) {
+  const voice = taskPageVoices.article
+  const page = pagination.page || 1
+  const lead = page === 1 ? posts[0] : null
+  const side = page === 1 ? posts.slice(1, 3) : []
+  const archivePosts = page === 1 ? posts.slice(3) : posts
+
+  return (
+    <EditableSiteShell>
+      <main style={archiveVars} className="bg-[var(--archive-bg)] text-[var(--archive-text)]">
+        <section className="mx-auto max-w-[1180px] px-4 pb-12 pt-10 sm:px-6 lg:px-8 lg:pb-16">
+          <div className="border-b border-black pb-7">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <p className="text-xs font-black uppercase tracking-[0.24em] text-[var(--archive-accent)]">{voice.eyebrow}</p>
+              <span className="inline-flex items-center gap-2 rounded-full border border-[var(--editable-border)] bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.18em]">
+                <BookOpen className="h-4 w-4" /> {categoryLabel}
+              </span>
+            </div>
+            <h1 className="mt-5 max-w-5xl text-5xl font-black leading-[0.98] tracking-tight sm:text-6xl lg:text-7xl">{voice.headline}</h1>
+            <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1fr)] lg:items-end">
+              <p className="max-w-2xl text-base font-semibold leading-8 opacity-70">{voice.description}</p>
+              <form action={basePath} className="grid gap-3 rounded-xl border border-[var(--editable-border)] bg-white/80 p-3 shadow-sm sm:grid-cols-[1fr_auto] lg:max-w-xl lg:justify-self-end">
+                <label className="flex min-w-0 items-center gap-2 rounded-lg bg-[var(--archive-bg)] px-4 py-3">
+                  <Filter className="h-4 w-4 opacity-50" />
+                  <select name="category" defaultValue={category} className="min-w-0 flex-1 bg-transparent text-sm font-black outline-none">
+                    <option value="all">All categories</option>
+                    {CATEGORY_OPTIONS.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}
+                  </select>
+                </label>
+                <button className="rounded-lg bg-[var(--archive-text)] px-5 py-3 text-sm font-black text-[var(--archive-bg)]">Apply</button>
+              </form>
+            </div>
+          </div>
+
+          {lead ? (
+            <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(320px,0.75fr)]">
+              <Link href={`${basePath}/${lead.slug}`} className="group grid overflow-hidden rounded-xl border border-[var(--editable-border)] bg-white shadow-[0_22px_70px_rgba(15,23,42,0.10)] md:grid-cols-[1.05fr_0.95fr]">
+                <div className="relative min-h-[340px] overflow-hidden bg-black/5">
+                  <img src={getImage(lead)} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                </div>
+                <div className="flex min-h-[340px] flex-col justify-between p-6 sm:p-8">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.24em] text-[var(--archive-accent)]">Lead article</p>
+                    <h2 className="mt-4 text-3xl font-black leading-tight tracking-tight sm:text-4xl">{lead.title}</h2>
+                    <p className="mt-5 text-sm font-semibold leading-7 opacity-65">{getSummary(lead)}</p>
+                  </div>
+                  <span className="mt-8 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--archive-text)] px-5 py-3 text-sm font-black text-[var(--archive-bg)]">
+                    Start reading <ArrowRight className="h-4 w-4" />
+                  </span>
+                </div>
+              </Link>
+
+              <aside className="rounded-xl border border-[var(--editable-border)] bg-white p-5 shadow-sm">
+                <div className="flex items-center gap-2 border-b border-[var(--editable-border)] pb-4">
+                  <Clock3 className="h-4 w-4 text-[var(--archive-accent)]" />
+                  <h2 className="text-sm font-black uppercase tracking-[0.2em]">Editor shortlist</h2>
+                </div>
+                <div>
+                  {side.map((post, index) => <ArticleDigestCard key={post.id || post.slug} post={post} href={`${basePath}/${post.slug}`} index={index} />)}
+                </div>
+              </aside>
+            </div>
+          ) : null}
+        </section>
+
+        <section className="mx-auto max-w-[1180px] px-4 pb-16 sm:px-6 lg:px-8">
+          {archivePosts.length ? (
+            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {archivePosts.map((post, index) => <ArticleArchiveCard key={post.id || post.slug} post={post} href={`${basePath}/${post.slug}`} index={index + (lead ? 3 : 0)} />)}
+            </div>
+          ) : posts.length ? null : (
+            <div className="rounded-xl border border-dashed border-[var(--editable-border)] bg-white/70 p-10 text-center">
+              <Search className="mx-auto h-8 w-8 opacity-45" />
+              <h2 className="mt-4 text-3xl font-black tracking-tight">No articles found</h2>
+              <p className="mt-2 text-sm font-semibold opacity-65">Try another category or return to all articles.</p>
+            </div>
+          )}
+
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+            {pagination.hasPrevPage ? <Link href={pageHref(basePath, category, page - 1)} className="rounded-full border border-[var(--editable-border)] bg-white px-5 py-3 text-sm font-black">Previous</Link> : null}
+            <span className="rounded-full bg-[var(--archive-text)] px-5 py-3 text-sm font-black text-[var(--archive-bg)]">Page {page} of {pagination.totalPages || 1}</span>
+            {pagination.hasNextPage ? <Link href={pageHref(basePath, category, page + 1)} className="rounded-full border border-[var(--editable-border)] bg-white px-5 py-3 text-sm font-black">Next</Link> : null}
+          </div>
+        </section>
+      </main>
+    </EditableSiteShell>
+  )
+}
+
+function ArticleDigestCard({ post, href, index }: { post: SitePost; href: string; index: number }) {
+  return (
+    <Link href={href} className="group grid grid-cols-[76px_minmax(0,1fr)] gap-4 border-b border-[var(--editable-border)] py-4 last:border-b-0">
+      <div className="relative aspect-square overflow-hidden rounded-lg bg-black/5">
+        <img src={getImage(post)} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+      </div>
+      <div className="min-w-0">
+        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--archive-accent)]">Pick {index + 1}</p>
+        <h3 className="mt-1 line-clamp-2 text-base font-black leading-tight tracking-tight">{post.title}</h3>
+        <p className="mt-2 line-clamp-2 text-xs font-semibold leading-5 opacity-60">{getSummary(post)}</p>
+      </div>
+    </Link>
+  )
+}
+
+function ProfileArchiveView({
+  posts,
+  pagination,
+  category,
+  basePath,
+  archiveVars,
+  categoryLabel,
+}: {
+  posts: SitePost[]
+  pagination: SiteFeedPagination
+  category: string
+  basePath: string
+  archiveVars: CSSProperties
+  categoryLabel: string
+}) {
+  const voice = taskPageVoices.profile
+  const page = pagination.page || 1
+  const lead = page === 1 ? posts[0] : null
+  const side = page === 1 ? posts.slice(1, 4) : []
+  const archiveProfiles = page === 1 ? posts.slice(4) : posts
+
+  return (
+    <EditableSiteShell>
+      <main style={archiveVars} className="bg-[var(--archive-bg)] text-[var(--archive-text)]">
+        <section className="mx-auto max-w-[1180px] px-4 pb-12 pt-10 sm:px-6 lg:px-8 lg:pb-16">
+          <div className="grid gap-8 border-b border-black pb-8 lg:grid-cols-[minmax(0,1fr)_330px] lg:items-end">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.24em] text-[var(--archive-accent)]">{voice.eyebrow}</p>
+              <h1 className="mt-5 max-w-5xl text-5xl font-black leading-[0.98] tracking-tight sm:text-6xl lg:text-7xl">{voice.headline}</h1>
+              <p className="mt-6 max-w-3xl text-base font-semibold leading-8 opacity-70">{voice.description}</p>
+            </div>
+            <form action={basePath} className="rounded-xl border border-[var(--editable-border)] bg-white/80 p-4 shadow-sm">
+              <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] opacity-55"><Filter className="h-4 w-4" /> Profile filter</div>
+              <select name="category" defaultValue={category} className="mt-4 h-12 w-full rounded-lg bg-[var(--archive-bg)] px-4 text-sm font-black outline-none">
+                <option value="all">All categories</option>
+                {CATEGORY_OPTIONS.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}
+              </select>
+              <button className="mt-3 h-12 w-full rounded-lg bg-[var(--archive-text)] text-sm font-black text-[var(--archive-bg)]">Apply</button>
+              <p className="mt-3 text-xs font-bold opacity-55">Showing: {categoryLabel}</p>
+            </form>
+          </div>
+
+          {lead ? (
+            <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.8fr)]">
+              <Link href={`${basePath}/${lead.slug}`} className="group grid overflow-hidden rounded-xl border border-[var(--editable-border)] bg-white shadow-[0_22px_70px_rgba(15,23,42,0.10)] md:grid-cols-[330px_minmax(0,1fr)]">
+                <div className="flex min-h-[340px] items-center justify-center bg-[var(--archive-bg)] p-8">
+                  <div className="relative h-52 w-52 overflow-hidden rounded-full border border-[var(--editable-border)] bg-white shadow-[0_18px_44px_rgba(15,23,42,0.12)]">
+                    {getImages(lead)[0] ? <img src={getImages(lead)[0]} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" /> : <UserRound className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 opacity-35" />}
+                  </div>
+                </div>
+                <div className="flex min-h-[340px] flex-col justify-between p-6 sm:p-8">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.24em] text-[var(--archive-accent)]">Featured profile</p>
+                    <h2 className="mt-4 text-3xl font-black leading-tight tracking-tight sm:text-4xl">{lead.title}</h2>
+                    {getField(lead, ['role', 'designation', 'company', 'location']) ? <p className="mt-3 text-xs font-black uppercase tracking-[0.18em] opacity-55">{getField(lead, ['role', 'designation', 'company', 'location'])}</p> : null}
+                    <p className="mt-5 text-sm font-semibold leading-7 opacity-65">{getSummary(lead)}</p>
+                  </div>
+                  <span className="mt-8 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--archive-text)] px-5 py-3 text-sm font-black text-[var(--archive-bg)]">
+                    View profile <ArrowRight className="h-4 w-4" />
+                  </span>
+                </div>
+              </Link>
+
+              <aside className="rounded-xl border border-[var(--editable-border)] bg-white p-5 shadow-sm">
+                <div className="flex items-center gap-2 border-b border-[var(--editable-border)] pb-4">
+                  <UserRound className="h-4 w-4 text-[var(--archive-accent)]" />
+                  <h2 className="text-sm font-black uppercase tracking-[0.2em]">Notable profiles</h2>
+                </div>
+                <div>
+                  {side.map((post, index) => <ProfileDigestCard key={post.id || post.slug} post={post} href={`${basePath}/${post.slug}`} index={index} />)}
+                </div>
+              </aside>
+            </div>
+          ) : null}
+        </section>
+
+        <section className="mx-auto max-w-[1180px] px-4 pb-16 sm:px-6 lg:px-8">
+          {archiveProfiles.length ? (
+            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {archiveProfiles.map((post, index) => <ProfileArchiveCard key={post.id || post.slug} post={post} href={`${basePath}/${post.slug}`} index={index + (lead ? 4 : 0)} />)}
+            </div>
+          ) : posts.length ? null : (
+            <div className="rounded-xl border border-dashed border-[var(--editable-border)] bg-white/70 p-10 text-center">
+              <UserRound className="mx-auto h-8 w-8 opacity-45" />
+              <h2 className="mt-4 text-3xl font-black tracking-tight">No profiles found</h2>
+              <p className="mt-2 text-sm font-semibold opacity-65">Try another category or return to all profiles.</p>
+            </div>
+          )}
+
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+            {pagination.hasPrevPage ? <Link href={pageHref(basePath, category, page - 1)} className="rounded-full border border-[var(--editable-border)] bg-white px-5 py-3 text-sm font-black">Previous</Link> : null}
+            <span className="rounded-full bg-[var(--archive-text)] px-5 py-3 text-sm font-black text-[var(--archive-bg)]">Page {page} of {pagination.totalPages || 1}</span>
+            {pagination.hasNextPage ? <Link href={pageHref(basePath, category, page + 1)} className="rounded-full border border-[var(--editable-border)] bg-white px-5 py-3 text-sm font-black">Next</Link> : null}
+          </div>
+        </section>
+      </main>
+    </EditableSiteShell>
+  )
+}
+
+function ProfileDigestCard({ post, href, index }: { post: SitePost; href: string; index: number }) {
+  const avatar = getImages(post)[0]
+  const role = getField(post, ['role', 'designation', 'company', 'location'])
+  return (
+    <Link href={href} className="group grid grid-cols-[70px_minmax(0,1fr)] gap-4 border-b border-[var(--editable-border)] py-4 last:border-b-0">
+      <div className="relative aspect-square overflow-hidden rounded-full bg-[var(--archive-bg)] ring-1 ring-[var(--editable-border)]">
+        {avatar ? <img src={avatar} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" /> : <UserRound className="absolute left-1/2 top-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 opacity-35" />}
+      </div>
+      <div className="min-w-0">
+        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--archive-accent)]">Profile {index + 1}</p>
+        <h3 className="mt-1 line-clamp-2 text-base font-black leading-tight tracking-tight">{post.title}</h3>
+        {role ? <p className="mt-2 line-clamp-1 text-xs font-black uppercase tracking-[0.14em] opacity-55">{role}</p> : null}
+      </div>
+    </Link>
   )
 }
 
@@ -157,15 +399,18 @@ function ArticleArchiveCard({ post, href, index }: { post: SitePost; href: strin
   const image = getImage(post)
   const category = getCategory(post, 'Article')
   return (
-    <Link href={href} className="group overflow-hidden rounded-[2rem] border border-[var(--editable-border)] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
-      <div className="relative aspect-[4/3] overflow-hidden bg-black/5">
+    <Link href={href} className="group overflow-hidden rounded-xl border border-[var(--editable-border)] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-[0_20px_56px_rgba(15,23,42,0.11)]">
+      <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
         <img src={image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
         <span className="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em]">{category}</span>
       </div>
       <div className="p-5">
-        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[var(--archive-accent)]">Story {String(index + 1).padStart(2, '0')}</p>
-        <h2 className="mt-2 text-xl font-black leading-tight tracking-[-0.04em]">{post.title}</h2>
-        <p className="mt-3 line-clamp-3 text-sm leading-6 opacity-65">{getSummary(post)}</p>
+        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[var(--archive-accent)]">Article {String(index + 1).padStart(2, '0')}</p>
+        <h2 className="mt-2 text-xl font-black leading-tight tracking-tight">{post.title}</h2>
+        <p className="mt-3 line-clamp-3 text-sm font-semibold leading-7 opacity-65">{getSummary(post)}</p>
+        <span className="mt-5 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] opacity-60 transition group-hover:opacity-100">
+          Read article <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-1" />
+        </span>
       </div>
     </Link>
   )
@@ -266,17 +511,21 @@ function PdfArchiveCard({ post, href }: { post: SitePost; href: string }) {
   )
 }
 
-function ProfileArchiveCard({ post, href }: { post: SitePost; href: string }) {
+function ProfileArchiveCard({ post, href, index = 0 }: { post: SitePost; href: string; index?: number }) {
   const avatar = getImages(post)[0]
   const role = getField(post, ['role', 'designation', 'company', 'location'])
   return (
-    <Link href={href} className="group rounded-[2rem] border border-[var(--editable-border)] bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
-      <div className="mx-auto flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-[var(--archive-bg)] ring-1 ring-[var(--editable-border)]">
+    <Link href={href} className="group rounded-xl border border-[var(--editable-border)] bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-[0_20px_56px_rgba(15,23,42,0.11)]">
+      <div className="flex items-start justify-between gap-4">
+        <span className="rounded-full bg-[var(--archive-bg)] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em]">Profile {String(index + 1).padStart(2, '0')}</span>
+        <ArrowRight className="h-4 w-4 opacity-35 transition group-hover:translate-x-1 group-hover:opacity-100" />
+      </div>
+      <div className="mx-auto mt-7 flex h-32 w-32 items-center justify-center overflow-hidden rounded-full bg-[var(--archive-bg)] ring-1 ring-[var(--editable-border)]">
         {avatar ? <img src={avatar} alt="" className="h-full w-full object-cover" /> : <UserRound className="h-10 w-10 opacity-45" />}
       </div>
-      <h2 className="mt-5 text-xl font-black leading-tight tracking-[-0.04em]">{post.title}</h2>
+      <h2 className="mt-6 text-center text-2xl font-black leading-tight tracking-tight">{post.title}</h2>
       {role ? <p className="mt-2 text-xs font-black uppercase tracking-[0.16em] text-[var(--archive-accent)]">{role}</p> : null}
-      <p className="mt-4 line-clamp-3 text-sm leading-6 opacity-65">{getSummary(post)}</p>
+      <p className="mt-4 line-clamp-3 text-center text-sm font-semibold leading-7 opacity-65">{getSummary(post)}</p>
     </Link>
   )
 }
