@@ -17,6 +17,17 @@ body {
   background-image: var(--slot4-body-gradient) !important;
 }
 
+:root {
+  --editable-container: 1180px;
+}
+
+main,
+section,
+article,
+aside {
+  min-width: 0;
+}
+
 ::selection {
   background: color-mix(in oklab, var(--slot4-accent-fill) 22%, transparent);
   color: var(--slot4-page-text);
@@ -41,4 +52,8 @@ body {
 
 .article-content a {
   color: var(--slot4-accent-fill);
+}
+
+.article-content {
+  font-family: Georgia, "Times New Roman", serif;
 }
