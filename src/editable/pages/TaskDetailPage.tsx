@@ -362,12 +362,11 @@ function ProfileDetail({ post, related }: { post: SitePost; related: SitePost[] 
           </div>
         </div>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="mt-8">
           <article className="rounded-xl border border-[var(--editable-border)] bg-white p-7 shadow-sm sm:p-10">
             <BodyContent post={post} />
             <ImageStrip images={images.slice(1)} label="Profile gallery" />
           </article>
-          <RelatedPanel task="profile" post={post} related={related} />
         </div>
       </div>
     </section>
