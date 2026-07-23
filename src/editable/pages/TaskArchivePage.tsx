@@ -39,7 +39,20 @@ const getImages = (post: SitePost) => {
 const placeholder = '/placeholder.svg?height=900&width=1200'
 const getImage = (post: SitePost) => getImages(post)[0] || placeholder
 const getCategory = (post: SitePost, fallback: string) => asText(getContent(post).category) || post.tags?.[0] || fallback
-const getSummary = (post: SitePost) => post.summary || asText(getContent(post).description) || asText(getContent(post).excerpt) || asText(getContent(post).body)
+const decodeEntities = (value: string) => value
+  .replace(/&lt;/gi, '<')
+  .replace(/&gt;/gi, '>')
+  .replace(/&quot;/gi, '"')
+  .replace(/&#0?39;/gi, "'")
+  .replace(/&apos;/gi, "'")
+  .replace(/&nbsp;/gi, ' ')
+  .replace(/&amp;/gi, '&')
+const stripMarkup = (value: string) => {
+  if (!value) return ''
+  const decoded = /&(lt|gt|amp|quot|apos|nbsp|#0?39);/i.test(value) ? decodeEntities(value) : value
+  return decoded.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+}
+const getSummary = (post: SitePost) => stripMarkup(post.summary || asText(getContent(post).description) || asText(getContent(post).excerpt) || asText(getContent(post).body))
 const getField = (post: SitePost, keys: string[]) => {
   const content = getContent(post)
   for (const key of keys) {
