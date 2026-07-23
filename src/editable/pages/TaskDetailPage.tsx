@@ -87,9 +87,19 @@ const sanitizeHtml = (html: string) => hardenLinks(html
   .replace(/\s+on\w+=("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
   .replace(/(href|src)=(['"])javascript:[\s\S]*?\2/gi, '$1="#"'))
 
+const decodeEntities = (value: string) => value
+  .replace(/&lt;/gi, '<')
+  .replace(/&gt;/gi, '>')
+  .replace(/&quot;/gi, '"')
+  .replace(/&#0?39;/gi, "'")
+  .replace(/&apos;/gi, "'")
+  .replace(/&nbsp;/gi, ' ')
+  .replace(/&amp;/gi, '&')
+
 const formatPlainText = (raw: string) => {
-  const value = raw.trim()
+  let value = raw.trim()
   if (!value) return ''
+  if (/&lt;[a-z\/!]/i.test(value)) value = decodeEntities(value)
   if (/<[a-z][\s\S]*>/i.test(value)) return sanitizeHtml(linkifyMarkdown(value))
   return value
     .split(/\n{2,}/)
@@ -97,7 +107,14 @@ const formatPlainText = (raw: string) => {
     .join('')
 }
 
-const summaryText = (post: SitePost) => post.summary || asText(getContent(post).description) || asText(getContent(post).excerpt) || ''
+const normalizeForCompare = (value: string) => value.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase()
+
+const stripMarkup = (value: string) => {
+  if (!value) return ''
+  const decoded = /&(lt|gt|amp|quot|apos|nbsp|#0?39);/i.test(value) ? decodeEntities(value) : value
+  return decoded.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+}
+const summaryText = (post: SitePost) => stripMarkup(post.summary || asText(getContent(post).description) || asText(getContent(post).excerpt) || '')
 const categoryOf = (post: SitePost, fallback: string) => asText(getContent(post).category) || post.tags?.[0] || fallback
 const mapSrcFor = (post: SitePost) => {
   const address = getField(post, ['address', 'location', 'city'])
@@ -317,7 +334,10 @@ function ProfileDetail({ post, related }: { post: SitePost; related: SitePost[] 
   const role = getField(post, ['role', 'designation', 'company', 'location'])
   const website = getField(post, ['website', 'url'])
   const email = getField(post, ['email'])
-  const summary = summaryText(post)
+  const rawSummary = summaryText(post)
+  const bodyNormalized = normalizeForCompare(getBody(post))
+  const summaryNormalized = normalizeForCompare(rawSummary)
+  const summary = summaryNormalized && summaryNormalized !== bodyNormalized && !bodyNormalized.startsWith(summaryNormalized) ? rawSummary : ''
   return (
     <section className="bg-[var(--detail-bg)]">
       <div className="mx-auto max-w-[1180px] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
