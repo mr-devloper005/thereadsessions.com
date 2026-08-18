@@ -34,7 +34,7 @@ export function EditableContactLeadForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-[2rem] border border-[var(--editable-border)] bg-white/90 p-6 shadow-2xl shadow-black/5 backdrop-blur md:p-8">
+    <form onSubmit={handleSubmit} className="rounded-xl border border-black/[0.06] bg-white/90 p-6 shadow-[0_18px_70px_rgba(0,0,0,0.14)] shadow-black/5 backdrop-blur md:p-8">
       <div className="grid gap-4 md:grid-cols-2">
         <Field name="name" label="Full name" placeholder="Your name" required />
         <Field name="email" type="email" label="Email address" placeholder="you@example.com" required />
@@ -43,18 +43,18 @@ export function EditableContactLeadForm() {
         <Field name="phone" label="Phone number" placeholder="Optional" />
         <Field name="subject" label="Subject" placeholder="How can we help?" />
       </div>
-      <label className="mt-4 grid gap-2 text-sm font-black opacity-75">
+      <label className="mt-4 grid gap-2 text-sm font-extrabold opacity-75">
         Message
-        <textarea name="message" required rows={6} placeholder="Tell us what you need help with..." className="rounded-2xl border border-[var(--editable-border)] bg-white px-4 py-3 text-base font-medium text-slate-950 placeholder:text-slate-500 outline-none transition focus:border-current" />
+        <textarea name="message" required rows={6} placeholder="Tell us what you need help with..." className="rounded-xl border border-black/[0.06] bg-[var(--slot4-surface-bg)] px-4 py-3 text-base font-medium text-slate-950 placeholder:text-slate-500 outline-none transition focus:border-current" />
       </label>
       <input name="company" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
       {message ? (
-        <div className={`mt-5 flex items-start gap-3 rounded-2xl px-4 py-3 text-sm font-bold ${status === 'success' ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-700'}`}>
+        <div className={`mt-5 flex items-start gap-3 rounded-xl px-4 py-3 text-sm font-bold ${status === 'success' ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-700'}`}>
           {status === 'success' ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" /> : null}
           <span>{message}</span>
         </div>
       ) : null}
-      <button type="submit" disabled={status === 'submitting'} className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-stone-950 px-6 text-sm font-black uppercase tracking-[0.24em] text-white shadow-lg transition hover:bg-stone-800 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70">
+      <button type="submit" disabled={status === 'submitting'} className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-stone-950 px-6 text-sm font-extrabold uppercase tracking-[0.24em] text-white shadow-[0_12px_40px_rgba(0,0,0,0.08)] transition hover:bg-stone-800 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70">
         {status === 'submitting' ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
         Send message
       </button>
@@ -64,9 +64,9 @@ export function EditableContactLeadForm() {
 
 function Field({ name, label, type = 'text', placeholder, required = false }: { name: string; label: string; type?: string; placeholder?: string; required?: boolean }) {
   return (
-    <label className="grid gap-2 text-sm font-black opacity-75">
+    <label className="grid gap-2 text-sm font-extrabold opacity-75">
       {label}
-      <input name={name} type={type} required={required} placeholder={placeholder} className="h-12 rounded-2xl border border-[var(--editable-border)] bg-white px-4 text-base font-medium text-slate-950 placeholder:text-slate-500 outline-none transition focus:border-current" />
+      <input name={name} type={type} required={required} placeholder={placeholder} className="h-12 rounded-xl border border-black/[0.06] bg-[var(--slot4-surface-bg)] px-4 text-base font-medium text-slate-950 placeholder:text-slate-500 outline-none transition focus:border-current" />
     </label>
   )
 }

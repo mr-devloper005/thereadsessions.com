@@ -41,10 +41,10 @@ function SectionHeader({ eyebrow, title, href }: { eyebrow: string; title: strin
     <div className="flex flex-wrap items-end justify-between gap-4">
       <div>
         <p className={`${dc.type.eyebrow} ${pal.accentText}`}>{eyebrow}</p>
-        <h2 className="mt-3 max-w-3xl text-3xl font-black leading-tight tracking-tight sm:text-4xl">{title}</h2>
+        <h2 className="mt-3 max-w-3xl text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">{title}</h2>
       </div>
       {href ? (
-        <Link href={href} className="inline-flex items-center gap-2 rounded-full border border-black/[0.08] bg-white px-5 py-3 text-sm font-black transition hover:-translate-y-0.5 hover:shadow-sm">
+        <Link href={href} className="inline-flex items-center gap-2 rounded-full border border-black/[0.08] bg-[var(--slot4-surface-bg)] px-5 py-3 text-sm font-extrabold transition hover:-translate-y-0.5 hover:shadow-sm">
           View all <ArrowRight className="h-4 w-4" />
         </Link>
       ) : null}
@@ -54,17 +54,17 @@ function SectionHeader({ eyebrow, title, href }: { eyebrow: string; title: strin
 
 function PremiumStoryCard({ post, href, index, large = false }: { post: SitePost; href: string; index: number; large?: boolean }) {
   return (
-    <Link href={href} className={`group block overflow-hidden rounded-xl border border-black/[0.07] bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_60px_rgba(31,31,31,0.12)] ${large ? 'lg:row-span-2' : ''}`}>
+    <Link href={href} className={`group block overflow-hidden rounded-xl border border-black/[0.07] bg-[var(--slot4-surface-bg)] shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_60px_rgba(31,31,31,0.12)] ${large ? 'lg:row-span-2' : ''}`}>
       <div className={`relative overflow-hidden bg-[var(--slot4-media-bg)] ${large ? 'aspect-[16/11]' : 'aspect-[16/10]'}`}>
         <img src={getEditablePostImage(post)} alt={post.title} className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
       </div>
       <div className={large ? 'p-6 sm:p-7' : 'p-5'}>
-        <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.18em] text-[var(--slot4-accent)]">
+        <div className="flex items-center gap-3 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--slot4-accent)]">
           <span>{getCategory(post)}</span>
           <span className="h-1 w-1 rounded-full bg-current" />
           <span>Read {String(index + 1).padStart(2, '0')}</span>
         </div>
-        <h3 className={`mt-3 line-clamp-3 font-black leading-tight tracking-tight text-[var(--slot4-page-text)] ${large ? 'text-3xl sm:text-4xl' : 'text-xl'}`}>{post.title}</h3>
+        <h3 className={`mt-3 line-clamp-3 font-extrabold leading-tight tracking-tight text-[var(--slot4-page-text)] ${large ? 'text-3xl sm:text-4xl' : 'text-xl'}`}>{post.title}</h3>
         <p className={`mt-4 line-clamp-3 text-sm leading-7 ${pal.mutedText}`}>{getExcerpt(post, large ? 190 : 120)}</p>
       </div>
     </Link>
@@ -78,8 +78,8 @@ function DigestRow({ post, href, index }: { post: SitePost; href: string; index:
         <img src={getEditablePostImage(post)} alt={post.title} className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
       </div>
       <div className="min-w-0">
-        <p className={`text-[10px] font-black uppercase tracking-[0.18em] ${pal.accentText}`}>Editor's note {index + 1}</p>
-        <h3 className="mt-1 line-clamp-2 text-base font-black leading-tight tracking-tight">{post.title}</h3>
+        <p className={`text-[10px] font-extrabold uppercase tracking-[0.18em] ${pal.accentText}`}>Editor's note {index + 1}</p>
+        <h3 className="mt-1 line-clamp-2 text-base font-extrabold leading-tight tracking-tight">{post.title}</h3>
         <p className={`mt-2 line-clamp-2 text-xs leading-5 ${pal.mutedText}`}>{getExcerpt(post, 82)}</p>
       </div>
     </Link>
@@ -88,11 +88,11 @@ function DigestRow({ post, href, index }: { post: SitePost; href: string; index:
 
 function TextOnlyPick({ post, href, index }: { post: SitePost; href: string; index: number }) {
   return (
-    <Link href={href} className="group block rounded-xl border border-black/[0.07] bg-white p-5 transition hover:-translate-y-1 hover:shadow-[0_18px_44px_rgba(31,31,31,0.10)]">
-      <p className={`text-[11px] font-black uppercase tracking-[0.2em] ${pal.accentText}`}>No. {String(index + 1).padStart(2, '0')}</p>
-      <h3 className="mt-3 line-clamp-3 text-xl font-black leading-tight tracking-tight">{post.title}</h3>
+    <Link href={href} className="group block rounded-xl border border-black/[0.07] bg-[var(--slot4-surface-bg)] p-5 transition hover:-translate-y-1 hover:shadow-[0_18px_44px_rgba(31,31,31,0.10)]">
+      <p className={`text-[11px] font-extrabold uppercase tracking-[0.2em] ${pal.accentText}`}>No. {String(index + 1).padStart(2, '0')}</p>
+      <h3 className="mt-3 line-clamp-3 text-xl font-extrabold leading-tight tracking-tight">{post.title}</h3>
       <p className={`mt-4 line-clamp-3 text-sm leading-7 ${pal.mutedText}`}>{getExcerpt(post, 120)}</p>
-      <span className="mt-5 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] opacity-65 transition group-hover:opacity-100">
+      <span className="mt-5 inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.16em] opacity-65 transition group-hover:opacity-100">
         Read article <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-1" />
       </span>
     </Link>
@@ -110,9 +110,9 @@ export function EditableHomeHero({ primaryTask, primaryRoute, posts }: HomeSecti
         <div className="border-b border-black pb-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <p className={`${dc.type.eyebrow} ${pal.accentText}`}>{pagesContent.home.hero.badge}</p>
-            <p className="text-xs font-black uppercase tracking-[0.22em] opacity-55">{globalContent.site.name}</p>
+            <p className="text-xs font-extrabold uppercase tracking-[0.22em] opacity-55">{globalContent.site.name}</p>
           </div>
-          <h1 className="mt-5 max-w-5xl text-5xl font-black leading-[0.98] tracking-tight sm:text-6xl lg:text-7xl">{heroTitle}</h1>
+          <h1 className="mt-5 max-w-5xl text-5xl font-extrabold leading-[0.98] tracking-tight sm:text-6xl lg:text-7xl">{heroTitle}</h1>
           <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1fr)] lg:items-end">
             <p className={`max-w-2xl text-base leading-8 ${pal.mutedText} sm:text-lg`}>{pagesContent.home.hero.description}</p>
             <div className="flex flex-wrap gap-3 lg:justify-end">
@@ -124,32 +124,32 @@ export function EditableHomeHero({ primaryTask, primaryRoute, posts }: HomeSecti
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.75fr)]">
           {lead ? (
-            <Link href={postHref(primaryTask, lead, primaryRoute)} className="group grid overflow-hidden rounded-xl border border-black/[0.08] bg-white shadow-[0_22px_70px_rgba(31,31,31,0.10)] md:grid-cols-[1.05fr_0.95fr]">
+            <Link href={postHref(primaryTask, lead, primaryRoute)} className="group grid overflow-hidden rounded-xl border border-black/[0.08] bg-[var(--slot4-surface-bg)] shadow-[0_22px_70px_rgba(31,31,31,0.10)] md:grid-cols-[1.05fr_0.95fr]">
               <div className="relative min-h-[330px] overflow-hidden bg-[var(--slot4-media-bg)]">
                 <img src={getEditablePostImage(lead)} alt={lead.title} className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
               </div>
               <div className="flex min-h-[330px] flex-col justify-between p-6 sm:p-8">
                 <div>
                   <p className={`${dc.type.eyebrow} ${pal.accentText}`}>Cover story</p>
-                  <h2 className="mt-4 text-3xl font-black leading-tight tracking-tight sm:text-4xl">{lead.title}</h2>
+                  <h2 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">{lead.title}</h2>
                   <p className={`mt-5 text-sm leading-7 ${pal.mutedText}`}>{getExcerpt(lead, 210)}</p>
                 </div>
-                <span className="mt-8 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--slot4-dark-bg)] px-5 py-3 text-sm font-black text-white">
+                <span className="mt-8 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--slot4-dark-bg)] px-5 py-3 text-sm font-extrabold text-white">
                   Start reading <ArrowRight className="h-4 w-4" />
                 </span>
               </div>
             </Link>
           ) : (
-            <div className="rounded-xl border border-black/[0.08] bg-white p-8 shadow-sm">
+            <div className="rounded-xl border border-black/[0.08] bg-[var(--slot4-surface-bg)] p-8 shadow-sm">
               <p className={`${dc.type.eyebrow} ${pal.accentText}`}>Cover story</p>
-              <p className="mt-4 text-3xl font-black leading-tight">Fresh articles will appear here as soon as the archive updates.</p>
+              <p className="mt-4 text-3xl font-extrabold leading-tight">Fresh articles will appear here as soon as the archive updates.</p>
             </div>
           )}
 
-          <aside className="rounded-xl border border-black/[0.07] bg-white p-5 shadow-sm">
+          <aside className="rounded-xl border border-black/[0.07] bg-[var(--slot4-surface-bg)] p-5 shadow-sm">
             <div className="flex items-center gap-2 border-b border-black/[0.07] pb-4">
               <Sparkle className="h-4 w-4 text-[var(--slot4-accent)]" />
-              <h2 className="text-sm font-black uppercase tracking-[0.2em]">Editor picks</h2>
+              <h2 className="text-sm font-extrabold uppercase tracking-[0.2em]">Editor picks</h2>
             </div>
             <div>
               {side.map((post, index) => <DigestRow key={post.id || post.slug} post={post} href={postHref(primaryTask, post, primaryRoute)} index={index} />)}
@@ -212,17 +212,17 @@ export function EditableTimeCollections({ primaryTask, primaryRoute, posts, time
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10">
               <BookOpen className="h-5 w-5" />
             </div>
-            <h2 className="mt-6 text-3xl font-black leading-tight tracking-tight">Browse by editorial mood.</h2>
+            <h2 className="mt-6 text-3xl font-extrabold leading-tight tracking-tight">Browse by editorial mood.</h2>
             <p className="mt-4 text-sm leading-7 text-white/68">Search the archive or follow a topic lane built from the newest article stream.</p>
             <form action="/search" className="mt-6 rounded-xl border border-white/15 bg-white/10 p-2">
-              <label className="flex items-center gap-2 rounded-lg bg-white px-3 py-3 text-[var(--slot4-page-text)]">
+              <label className="flex items-center gap-2 rounded-lg bg-[var(--slot4-surface-bg)] px-3 py-3 text-[var(--slot4-page-text)]">
                 <Search className="h-4 w-4 opacity-50" />
                 <input name="q" placeholder="Search articles" className="min-w-0 flex-1 bg-transparent text-sm font-bold outline-none placeholder:text-current/40" />
               </label>
             </form>
             <div className="mt-6 flex flex-wrap gap-2">
               {topicLabels.map((topic) => (
-                <Link key={topic} href={`/search?q=${encodeURIComponent(topic)}`} className="rounded-full border border-white/15 px-3 py-1.5 text-xs font-black uppercase tracking-[0.14em] text-white/75 transition hover:bg-white hover:text-[var(--slot4-page-text)]">
+                <Link key={topic} href={`/search?q=${encodeURIComponent(topic)}`} className="rounded-full border border-white/15 px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.14em] text-white/75 transition hover:bg-[var(--slot4-surface-bg)] hover:text-[var(--slot4-page-text)]">
                   {topic}
                 </Link>
               ))}
@@ -231,15 +231,15 @@ export function EditableTimeCollections({ primaryTask, primaryRoute, posts, time
 
           <div className="min-w-0">
             {lead ? (
-              <Link href={postHref(primaryTask, lead, primaryRoute)} className="group grid overflow-hidden rounded-xl border border-black/[0.07] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-[0_22px_60px_rgba(31,31,31,0.12)] md:grid-cols-[0.95fr_1.05fr]">
+              <Link href={postHref(primaryTask, lead, primaryRoute)} className="group grid overflow-hidden rounded-xl border border-black/[0.07] bg-[var(--slot4-surface-bg)] shadow-sm transition hover:-translate-y-1 hover:shadow-[0_22px_60px_rgba(31,31,31,0.12)] md:grid-cols-[0.95fr_1.05fr]">
                 <div className="relative min-h-[280px] overflow-hidden bg-[var(--slot4-media-bg)]">
                   <img src={getEditablePostImage(lead)} alt={lead.title} className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
                 </div>
                 <div className="p-6 sm:p-8">
                   <p className={`${dc.type.eyebrow} ${pal.accentText}`}>Current feature</p>
-                  <h3 className="mt-4 text-3xl font-black leading-tight tracking-tight sm:text-4xl">{lead.title}</h3>
+                  <h3 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">{lead.title}</h3>
                   <p className={`mt-5 text-sm leading-7 ${pal.mutedText}`}>{getExcerpt(lead, 190)}</p>
-                  <span className="mt-7 inline-flex items-center gap-2 text-sm font-black">
+                  <span className="mt-7 inline-flex items-center gap-2 text-sm font-extrabold">
                     Continue <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
                   </span>
                 </div>
@@ -260,13 +260,13 @@ export function EditableHomeCta() {
   return (
     <section id="get-app" className={`${pal.panelBg} scroll-mt-24 border-t border-black/[0.07]`}>
       <div className="mx-auto max-w-[1180px] px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-6 rounded-xl border border-black/[0.07] bg-white p-7 shadow-[0_20px_60px_rgba(31,31,31,0.08)] md:grid-cols-[1fr_auto] md:items-center md:p-9">
+        <div className="grid gap-6 rounded-xl border border-black/[0.07] bg-[var(--slot4-surface-bg)] p-7 shadow-[0_20px_60px_rgba(31,31,31,0.08)] md:grid-cols-[1fr_auto] md:items-center md:p-9">
           <div>
-            <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] text-[var(--slot4-accent)]">
+            <div className="flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.2em] text-[var(--slot4-accent)]">
               <Clock3 className="h-4 w-4" />
               {pagesContent.home.cta.badge}
             </div>
-            <h2 className="mt-4 max-w-2xl text-3xl font-black leading-tight tracking-tight sm:text-4xl">{pagesContent.home.cta.title}</h2>
+            <h2 className="mt-4 max-w-2xl text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">{pagesContent.home.cta.title}</h2>
             <p className={`mt-4 max-w-2xl text-base leading-8 ${pal.mutedText}`}>{pagesContent.home.cta.description}</p>
           </div>
           <div className="flex flex-wrap gap-3 md:justify-end">
