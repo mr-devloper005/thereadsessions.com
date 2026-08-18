@@ -42,9 +42,9 @@ export function EditorialFeatureCard({ post, href, label = 'Featured read' }: { 
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(24,20,17,0.1),rgba(24,20,17,0.86))]" />
         <div className="relative z-10 flex h-full min-h-[380px] flex-col justify-end lg:min-h-[460px]">
           <span className={`${dc.type.eyebrow} ${pal.accentSoftText}`}>{label}</span>
-          <h3 className="mt-5 max-w-3xl text-4xl font-black leading-tight tracking-tight sm:text-5xl">{post.title}</h3>
+          <h3 className="mt-5 max-w-3xl text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">{post.title}</h3>
           <p className="mt-5 max-w-2xl text-sm leading-8 text-white/75 sm:text-base">{getEditableExcerpt(post, 190)}</p>
-          <span className={`mt-8 inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold ${pal.panelText}`}>
+          <span className={`mt-8 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--slot4-surface-bg)] px-5 py-3 text-sm font-bold ${pal.panelText}`}>
             Read story <ArrowRight className="h-4 w-4" />
           </span>
         </div>
@@ -58,11 +58,11 @@ export function RailPostCard({ post, href, index }: { post: SitePost; href: stri
     <Link href={href} className={`group ${dc.layout.minRailCard} block overflow-hidden ${dc.surface.card} ${dc.motion.lift}`}>
       <div className={`${dc.media.frame} ${dc.media.ratio}`}>
         <img src={getEditablePostImage(post)} alt={post.title} className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105" />
-        <span className={`absolute left-4 top-4 rounded-full ${pal.darkBg} px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white`}>No. {String(index + 1).padStart(2, '0')}</span>
+        <span className={`absolute left-4 top-4 rounded-full ${pal.darkBg} px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white`}>No. {String(index + 1).padStart(2, '0')}</span>
       </div>
       <div className="p-5">
         <p className={`${dc.type.eyebrow} ${pal.accentText}`}>{getEditableCategory(post)}</p>
-        <h3 className={`mt-3 line-clamp-3 text-xl font-black leading-tight tracking-tight ${pal.panelText}`}>{post.title}</h3>
+        <h3 className={`mt-3 line-clamp-3 text-xl font-extrabold leading-tight tracking-tight ${pal.panelText}`}>{post.title}</h3>
         <p className={`mt-3 line-clamp-3 text-sm leading-7 ${pal.softMutedText}`}>{getEditableExcerpt(post, 135)}</p>
       </div>
     </Link>
@@ -73,10 +73,10 @@ export function CompactIndexCard({ post, href, index }: { post: SitePost; href: 
   return (
     <Link href={href} className={`group block min-w-0 ${dc.surface.soft} p-5 ${dc.motion.lift}`}>
       <div className="flex items-start gap-4">
-        <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${pal.darkBg} text-xs font-black text-white`}>{index + 1}</span>
+        <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${pal.darkBg} text-xs font-extrabold text-white`}>{index + 1}</span>
         <div className="min-w-0">
           <p className={`flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] ${pal.accentText}`}><Clock3 className="h-3.5 w-3.5" /> {getEditableCategory(post)}</p>
-          <h3 className={`mt-2 line-clamp-2 text-xl font-black leading-tight tracking-[-0.04em] ${pal.panelText}`}>{post.title}</h3>
+          <h3 className={`mt-2 line-clamp-2 text-xl font-extrabold leading-tight tracking-[-0.04em] ${pal.panelText}`}>{post.title}</h3>
           <p className={`mt-2 line-clamp-2 text-sm leading-6 ${pal.softMutedText}`}>{getEditableExcerpt(post, 105)}</p>
         </div>
       </div>
@@ -92,9 +92,9 @@ export function ArticleListCard({ post, href, index }: { post: SitePost; href: s
       </div>
       <div className="min-w-0 p-2 sm:py-4 sm:pr-5">
         <p className={`${dc.type.eyebrow} ${pal.accentText}`}>Article {String(index + 1).padStart(2, '0')}</p>
-        <h2 className={`mt-3 line-clamp-3 text-2xl font-black leading-tight tracking-tight ${pal.panelText}`}>{post.title}</h2>
+        <h2 className={`mt-3 line-clamp-3 text-2xl font-extrabold leading-tight tracking-tight ${pal.panelText}`}>{post.title}</h2>
         <p className={`mt-4 line-clamp-3 text-sm leading-7 ${pal.softMutedText}`}>{getEditableExcerpt(post, 180)}</p>
-        <span className={`mt-5 inline-flex items-center gap-2 text-sm font-black ${pal.panelText}`}>Open article <ArrowRight className="h-4 w-4" /></span>
+        <span className={`mt-5 inline-flex items-center gap-2 text-sm font-extrabold ${pal.panelText}`}>Open article <ArrowRight className="h-4 w-4" /></span>
       </div>
     </Link>
   )
